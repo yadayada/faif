@@ -1,0 +1,219 @@
+\newcommand{\print}{0}
+\newcommand{\noemptypages}{1}
+\newcommand{\dotitlepage}{1}
+%mit alternativem Bild für kommerzielle Verwertung
+\newcommand{\commercial}{0}
+
+%größere Schrift
+%\RequirePackage{fix-cm}
+
+%Kapitelanfang nicht auf rechte Seite beschränken
+%halbe Zeile Abstand nach Absatzende
+\documentclass[
+	\ifnum\noemptypages=1 open=any,\fi parskip=half, chapterprefix=true, captions=oneline, fontsize=10pt]{scrbook}
+
+\usepackage[utf8x]{inputenc}
+\usepackage[ngerman]{babel}
+%\usepackage{microtype}
+
+%manuelle Worttrennungen
+\include{trennung.tex}
+
+%\RequirePackage[ngerman=ngerman-x-latest]{hyphsubst}
+\PrerenderUnicode{ä}	%für PDF-Titel
+
+\usepackage{lmodern}
+%für korrekte Darstellung der Umlaute in der PDF
+\usepackage[T1]{fontenc}
+\newcommand{\changefont}[3]{
+	\fontfamily{#1} \fontseries{#2} \fontshape{#3} \selectfont}
+
+%\usepackage[none]{hyphenat}
+%\usepackage{ucs}
+%\usepackage{amsmath}
+%\usepackage{amsfonts}
+%\usepackage{amssymb}
+
+% absolute Positionierung für Graphik
+%\usepackage[absolute]{textpos}
+
+%normale Schrift sans serif
+\renewcommand{\familydefault}{\sfdefault}
+
+%Papierformat Royal
+%\usepackage[paperwidth=16cm,paperheight=24cm]{geometry}
+
+\usepackage[a5paper]{geometry}
+\ifnum\print=0
+	\geometry{left=1.5cm, right=1.5cm, top=1.5cm, bottom=2cm}
+\else
+	\geometry{left=2cm, right=1.5cm, top=1.5cm, bottom=2.5cm}
+\fi
+
+\usepackage{jurabib}
+\jurabibsetup{
+	%Quellenverzeichnis erster Name: NN, VN;
+	%Zitate: VN NN
+	%Autor 1 und 2
+	authorformat={firstnotreversed,citationreversed,and,reducedifibidem},
+	ibidem={doublepage,strict},
+	citefull=chapter,
+	see,
+	titleformat={commasep,italic},
+	commabeforerest,
+}
+
+%\renewcommand*{\jbauthorfont}{\textsc}
+%\renewcommand*{\biblnfont}{\scshape\textbf}
+%\renewcommand*{\bibfnfont}{\normalfont\textbf}
+
+% a.a.O. -> ebd.
+\AddTo\bibsgerman{
+	\renewcommand*{\ibidemname}{Ebd.}
+	\renewcommand*{\ibidemmidname}{ebd.}
+	\renewcommand*{\biburlprefix}{} % keine URL-Klammern
+	\renewcommand*{\biburlsuffix}{}
+}
+
+\usepackage{graphicx}
+%\usepackage[usenames,dvipsnames]{color}
+
+% URLs blau, interne Links/Zitate schwarz, nicht umrahmen
+\usepackage[unicode=true, colorlinks=true, linkcolor=black, citecolor=black, breaklinks=false, urlcolor=blue, \ifnum\print=1 urlcolor=black\fi]{hyperref}
+\hypersetup{pdftitle={Frei wie in Freiheit -- Richard Stallmans Kreuzzug für freie Software}}
+
+\urlstyle{same}
+
+%Stichwortverzeichnis
+\usepackage{imakeidx}
+\makeindex
+
+% absolute Positionierung für Graphik
+\usepackage[absolute]{textpos}
+
+\def\chapterautorefname{Kapitel}
+
+% KOMA-Schriftarten auf Standard zurücksetzen
+%\addtokomafont{title}{\rmfamily}
+%\addtokomafont{chapter}{\rmfamily}
+%\addtokomafont{section}{\rmfamily\bfseries\center} %nur im Anhang - GPL
+%\addtokomafont{subsection}{\rmfamily}
+%\addtokomafont{chapterentry}{\rmfamily\mdseries}
+
+\renewcommand{\titlepagestyle}{\normalsize}
+
+%Kapitelbezeichnung nicht im Seitenkopf
+%\pagestyle{plain}
+
+% Fußnoten nicht einrücken
+\deffootnote{0em}{0em}{\textsuperscript{\thefootnotemark\ }}
+%Breite der Trennlinie über den Fußnoten
+\renewcommand{\footnoterule}{\rule{\textwidth}{0px}{\vspace*{0px}}}
+
+%Bildunterschrift verschmälern
+\usepackage[margin=0.10\textwidth,font=small,labelfont=bf]{caption}
+
+%Abstand für Fußnoten
+\footnotesep1em
+
+\newcommand{\comment}[1]{}
+
+\begin{document}
+
+%"Flattersatz" halbwegs vermeiden
+\sloppy
+
+% Fußnoten nicht über zwei Seiten verteilen
+%\interfootnotelinepenalty=10000
+
+\ifnum\dotitlepage=1
+	\begin{titlepage}
+		\ifnum\commercial=0
+			\addtolength{\topmargin}{2em}
+		\else
+			\addtolength{\topmargin}{-2em}
+		\fi
+
+		\TPGrid{10}{10}
+		
+		\ifnum\commercial=1
+			\begin{textblock}{11}(0,0)
+				\includegraphics[width=\textwidth]{rms.jpg}
+			\end{textblock}
+		\else
+			\begin{textblock}{11}(-8,0)
+				\includegraphics[height=1.3\textwidth]{nqn_richard_stallman.jpg}
+			\end{textblock}
+		\fi
+		
+		\vspace*{\fill}
+
+		\changefont{phv}{m}{n}
+		\vspace*{\fill}
+		{\fontsize{42}{50}\selectfont	
+			\textbf{Frei\vspace*{.2em}\\wie in\vspace*{.2em}\\ Freiheit\vspace*{.2em}\\}
+		}
+		{\large Richard Stallmans Kreuzzug\vspace*{.2em}\\ für freie Software\\~\\~}
+%		\vspace*{\fill}
+	
+	    {\large Sam Williams\vspace*{.2em}\\ Revision: Richard M. Stallman\vspace*{.2em}\\ Übersetzung: Theo Walm}
+	\end{titlepage}
+\fi
+
+\frontmatter
+	\include{copyright}
+	\phantomsection
+	\tableofcontents
+
+	\input{vorwort_rms}
+	%\include{vorwort_wil}
+
+\mainmatter
+	\include{kap1}
+	\include{kap2}
+	\include{kap3}
+	\include{kap4}
+	\include{kap5}
+	\include{kap6}
+	\include{kap7}
+	\include{kap8}
+	\include{kap9}
+	\include{kap10}
+	\include{kap11}
+	%\include{kap12}
+	\include{kap13}
+
+	%\include{epilog}
+
+\backmatter
+	\include{anhang_a}
+	\include{anhang_b}
+	\include{anhang_c}
+
+%TODO: jurabib - Titel-Stil funktioniert (noch) nicht für inbook/incollection
+\renewcommand\bibname{Quellenverzeichnis}
+\small
+\raggedright
+
+\ifnum\noemptypages=1
+	\newpage
+\else
+	\cleardoublepage
+\fi
+\phantomsection
+\addcontentsline{toc}{chapter}{\bibname}
+
+\bibliography{faif}
+\bibliographystyle{jurabib}
+
+\ifnum\noemptypages=1
+	\newpage
+\else
+	\cleardoublepage
+\fi
+\phantomsection
+\addcontentsline{toc}{chapter}{Index}
+%TODO: Index erweitern
+\printindex
+
+\end{document}
